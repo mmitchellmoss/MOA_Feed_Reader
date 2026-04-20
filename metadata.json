@@ -1,0 +1,6 @@
+{
+  "name": "MOA Feed Reader",
+  "description": "A standalone RSS feed reader for BMW MOA forums with subscribe and ignore features.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
