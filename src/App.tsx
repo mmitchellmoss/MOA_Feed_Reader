@@ -137,7 +137,7 @@ export default function App() {
               className="h-12 w-[340px] rounded bg-no-repeat"
               style={{ 
                 backgroundImage: 'url(/Satchel_Hopkins_Banner.png)', 
-                backgroundSize: '160%',
+                backgroundSize: '144%',
                 backgroundPosition: '50% 0%'
               }}
               title="Satchel Hopkins"
