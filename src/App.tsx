@@ -255,6 +255,7 @@ export default function App() {
                     minute: '2-digit'
                   });
 
+                  return (
                     <FeedCard
                       key={id}
                       item={item}

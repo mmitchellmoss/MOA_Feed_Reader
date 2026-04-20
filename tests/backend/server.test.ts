@@ -1,3 +1,6 @@
+/**
+ * @vitest-environment node
+ */
 import { describe, it, expect, vi } from 'vitest';
 import request from 'supertest';
 import { createServerApp } from '../../server';
