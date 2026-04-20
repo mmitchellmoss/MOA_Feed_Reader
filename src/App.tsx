@@ -131,14 +131,18 @@ export default function App() {
     <div className="flex flex-col h-screen bg-black text-zinc-200 font-sans overflow-hidden">
       {/* Header */}
       <header className="h-16 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
-        <div className="flex items-center h-14 w-[400px] overflow-hidden rounded-lg">
+        <div className="flex items-center h-14 w-[600px] overflow-hidden rounded-lg">
           <div className="flex items-center gap-4 ml-2">
-            <img 
-              src="/Satchel_Hopkins_Banner.png" 
-              alt="Satchel Hopkins" 
-              className="h-10 object-contain"
+            <div 
+              className="h-12 w-[340px] rounded bg-no-repeat"
+              style={{ 
+                backgroundImage: 'url(/Satchel_Hopkins_Banner.png)', 
+                backgroundSize: '160%',
+                backgroundPosition: '50% 0%'
+              }}
+              title="Satchel Hopkins"
             />
-            <span className="font-bold text-sm tracking-widest text-zinc-200 uppercase opacity-80 border-l border-zinc-700 pl-4">
+            <span className="font-bold text-sm tracking-widest text-zinc-200 uppercase opacity-80 border-l border-zinc-700 pl-4 shrink-0">
               Feed Reader
             </span>
           </div>
