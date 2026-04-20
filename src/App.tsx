@@ -132,11 +132,13 @@ export default function App() {
       {/* Header */}
       <header className="h-16 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
         <div className="flex items-center h-14 w-[400px] overflow-hidden rounded-lg">
-          <div className="flex items-center gap-3 ml-2">
-            <span className="font-gothic text-4xl text-blue-500 tracking-widest drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]">
-              Satchel Hopkins
-            </span>
-            <span className="font-bold text-sm tracking-widest text-zinc-200 uppercase mt-2 opacity-80">
+          <div className="flex items-center gap-4 ml-2">
+            <img 
+              src="/Satchel_Hopkins_Banner.png" 
+              alt="Satchel Hopkins" 
+              className="h-10 object-contain"
+            />
+            <span className="font-bold text-sm tracking-widest text-zinc-200 uppercase opacity-80 border-l border-zinc-700 pl-4">
               Feed Reader
             </span>
           </div>
