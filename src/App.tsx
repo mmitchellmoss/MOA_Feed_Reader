@@ -120,12 +120,7 @@ export default function App() {
     });
   }, [feed, subscribedIds, ignoredIds, sidebarFilter]);
 
-  const resetFilters = () => {
-    if (confirm('Are you sure you want to clear all your subscriptions and ignored posts?')) {
-      setSubscribedIds([]);
-      setIgnoredIds([]);
-    }
-  };
+
 
   return (
     <div className="flex flex-col h-screen bg-black text-zinc-200 font-sans overflow-hidden">
@@ -217,15 +212,7 @@ export default function App() {
             </div>
           </nav>
 
-          <div className="mt-auto pt-6 border-t border-zinc-800">
-             <button 
-              onClick={resetFilters}
-              className="flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-wider hover:text-red-500 transition-colors"
-            >
-              <Trash2 className="w-3.5 h-3.5" />
-              Reset Settings
-            </button>
-          </div>
+
         </aside>
 
         {/* Main content */}
