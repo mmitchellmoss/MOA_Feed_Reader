@@ -1,34 +1,54 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg: #f8fafc;
-  --color-sidebar: #ffffff;
-  --color-card: #ffffff;
-  --color-primary: #2563eb;
-  --color-accent: #1d4ed8;
-  --color-text-main: #1e293b;
-  --color-text-muted: #64748b;
-  --color-border: #e2e8f0;
-  --color-special-bg: #eff6ff;
+  --color-bg: #000000;
+  --color-sidebar: #0f172a;
+  --color-card: #0f172a;
+  --color-primary: #3b82f6;
+  --color-accent: #60a5fa;
+  --color-text-main: #f8fafc;
+  --color-text-muted: #94a3b8;
+  --color-border: #1e293b;
+  --color-special-bg: #1e3a8a;
   --color-special-border: #3b82f6;
   
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  --font-gothic: 'UnifrakturMaguntia', cursive;
 }
 
 :root {
-  --bg: #f8fafc;
-  --sidebar: #ffffff;
-  --card: #ffffff;
-  --primary: #2563eb;
-  --accent: #1d4ed8;
-  --text-main: #1e293b;
-  --text-muted: #64748b;
-  --border: #e2e8f0;
-  --special-bg: #eff6ff;
+  --bg: #000000;
+  --sidebar: #0f172a;
+  --card: #0f172a;
+  --primary: #3b82f6;
+  --accent: #60a5fa;
+  --text-main: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: #1e293b;
+  --special-bg: #1e3a8a;
   --special-border: #3b82f6;
 }
 
 body {
   background-color: var(--bg);
   color: var(--text-main);
+}
+
+.font-gothic {
+  font-family: var(--font-gothic);
+}
+
+/* Custom Scrollbar for Dark Mode */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
 }

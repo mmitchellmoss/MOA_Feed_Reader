@@ -128,32 +128,31 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-[#f8fafc] text-[#1e293b] font-sans overflow-hidden">
+    <div className="flex flex-col h-screen bg-bg text-text-main font-sans overflow-hidden">
       {/* Header */}
-      <header className="h-16 bg-white border-b border-[#e2e8f0] flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
+      <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
         <div className="flex items-center h-14 w-[400px] overflow-hidden rounded-lg">
-          <img 
-            src="/Satchel_Hopkins_Banner.png" 
-            alt="Satchel Hopkins Banner" 
-            className="w-full h-full object-cover object-top brightness-110"
-            onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              e.currentTarget.parentElement!.innerHTML = '<div class="flex items-center gap-3 ml-2"><div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white text-xs font-bold">SH</div><span class="font-bold text-xl tracking-tight text-blue-600">Forum Reader</span></div>';
-            }}
-          />
+          <div className="flex items-center gap-3 ml-2">
+            <span className="font-gothic text-4xl text-blue-500 tracking-widest drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]">
+              Satchel Hopkins
+            </span>
+            <span className="font-bold text-sm tracking-widest text-text-main uppercase mt-2 opacity-80">
+              Feed Reader
+            </span>
+          </div>
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="flex bg-[#f8fafc] p-1 border border-[#e2e8f0] rounded-lg">
+          <div className="flex bg-bg p-1 border border-border rounded-lg">
             <button 
               onClick={() => setViewMode('summary')}
-              className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'summary' ? 'bg-white shadow-sm text-primary' : 'text-[#64748b] hover:text-[#1e293b]'}`}
+              className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'summary' ? 'bg-card shadow-sm text-primary' : 'text-text-muted hover:text-text-main'}`}
             >
               Summary
             </button>
             <button 
               onClick={() => setViewMode('full')}
-              className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'full' ? 'bg-white shadow-sm text-primary' : 'text-[#64748b] hover:text-[#1e293b]'}`}
+              className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'full' ? 'bg-card shadow-sm text-primary' : 'text-text-muted hover:text-text-main'}`}
             >
               Full View
             </button>
@@ -172,38 +171,38 @@ export default function App() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-64 border-r border-[#e2e8f0] bg-white flex flex-col p-5 shrink-0">
-          <div className="text-[10px] uppercase tracking-widest text-[#64748b] font-bold mb-4">Feeds</div>
+        <aside className="w-64 border-r border-border bg-card flex flex-col p-5 shrink-0">
+          <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4">Feeds</div>
           <nav className="space-y-1">
             <button 
               onClick={() => setSidebarFilter('all')}
-              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'all' ? 'bg-special-bg text-primary font-semibold' : 'text-[#1e293b] hover:bg-[#f8fafc]'}`}
+              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'all' ? 'bg-special-bg text-primary font-semibold' : 'text-text-main hover:bg-bg'}`}
             >
               <div className="flex items-center gap-3">
                 <Activity className="w-4 h-4" />
                 <span>All Activity</span>
               </div>
-              <span className="bg-[#e2e8f0] text-[#64748b] px-2 py-0.5 rounded-full text-[10px] font-bold">
+              <span className="bg-slate-700 text-text-muted px-2 py-0.5 rounded-full text-[10px] font-bold">
                 {feed?.items.filter(i => !ignoredIds.includes(i.guid || i.link || '')).length || 0}
               </span>
             </button>
             <button 
               onClick={() => setSidebarFilter('subscribed')}
-              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'subscribed' ? 'bg-special-bg text-primary font-semibold' : 'text-[#1e293b] hover:bg-[#f8fafc]'}`}
+              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'subscribed' ? 'bg-special-bg text-primary font-semibold' : 'text-text-main hover:bg-bg'}`}
             >
               <div className="flex items-center gap-3">
                 <Bookmark className="w-4 h-4" />
                 <span>Subscribed</span>
               </div>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${subscribedIds.length > 0 ? 'bg-primary text-white' : 'bg-[#e2e8f0] text-[#64748b]'}`}>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${subscribedIds.length > 0 ? 'bg-primary text-white' : 'bg-slate-700 text-text-muted'}`}>
                 {subscribedIds.length}
               </span>
             </button>
           </nav>
 
-          <div className="text-[10px] uppercase tracking-widest text-[#64748b] font-bold mt-8 mb-4">Filters</div>
+          <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mt-8 mb-4">Filters</div>
           <nav className="space-y-1">
-            <div className="flex items-center justify-between p-2.5 rounded-lg text-sm text-[#64748b] opacity-60">
+            <div className="flex items-center justify-between p-2.5 rounded-lg text-sm text-text-muted opacity-60">
               <div className="flex items-center gap-3">
                 <Filter className="w-4 h-4" />
                 <span>Ignored</span>
@@ -212,10 +211,10 @@ export default function App() {
             </div>
           </nav>
 
-          <div className="mt-auto pt-6 border-t border-[#e2e8f0]">
+          <div className="mt-auto pt-6 border-t border-border">
              <button 
               onClick={resetFilters}
-              className="flex items-center gap-2 text-[10px] text-[#64748b] font-bold uppercase tracking-wider hover:text-red-500 transition-colors"
+              className="flex items-center gap-2 text-[10px] text-text-muted font-bold uppercase tracking-wider hover:text-red-500 transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" />
               Reset Settings
@@ -224,9 +223,9 @@ export default function App() {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto p-8 bg-[#f8fafc] scroll-smooth">
+        <main className="flex-1 overflow-y-auto p-8 bg-bg scroll-smooth">
           {error && (
-            <div className="mb-8 p-4 bg-red-50 border border-red-100 text-red-900 rounded-xl flex items-start gap-4">
+            <div className="mb-8 p-4 bg-red-950 border border-red-100 text-red-900 rounded-xl flex items-start gap-4">
               <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-500" />
               <div>
                 <p className="font-bold text-sm">Update Failed</p>
@@ -239,7 +238,7 @@ export default function App() {
             {loading && !feed ? (
               <div className="flex flex-col items-center justify-center py-32 gap-4 animate-pulse opacity-50">
                 <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-                <p className="text-xs font-bold tracking-widest text-[#64748b] uppercase">Loading Feed Entries...</p>
+                <p className="text-xs font-bold tracking-widest text-text-muted uppercase">Loading Feed Entries...</p>
               </div>
             ) : (
               <AnimatePresence initial={false}>
@@ -272,12 +271,12 @@ export default function App() {
             )}
 
             {filteredAndSortedItems.length === 0 && !loading && (
-              <div className="py-32 text-center bg-white border border-[#e2e8f0] rounded-2xl shadow-sm">
-                <div className="w-16 h-16 bg-[#f1f5f9] rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Rss className="w-8 h-8 text-[#94a3b8]" />
+              <div className="py-32 text-center bg-card border border-border rounded-2xl shadow-sm">
+                <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Rss className="w-8 h-8 text-slate-500" />
                 </div>
-                <h3 className="font-bold text-[#1e293b]">No items to show</h3>
-                <p className="text-xs text-[#64748b] mt-1 uppercase tracking-wider font-bold">Your feed filters are quite strict!</p>
+                <h3 className="font-bold text-text-main">No items to show</h3>
+                <p className="text-xs text-text-muted mt-1 uppercase tracking-wider font-bold">Your feed filters are quite strict!</p>
               </div>
             )}
           </div>

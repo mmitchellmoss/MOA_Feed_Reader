@@ -55,7 +55,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
-      className={`group border rounded-xl p-5 relative transition-all duration-200 cursor-pointer ${isSubscribed ? 'bg-special-bg border-special-border shadow-sm' : 'bg-white border-[#e2e8f0] hover:shadow-md hover:border-[#cbd5e1]'}`}
+      className={`group border rounded-xl p-5 relative transition-all duration-200 cursor-pointer ${isSubscribed ? 'bg-special-bg border-special-border shadow-sm' : 'bg-card border-border hover:shadow-md hover:border-slate-700'}`}
       onClick={() => onToggleExpand(id)}
       data-testid={`feed-card-${id}`}
     >
@@ -70,12 +70,12 @@ export const FeedCard: React.FC<FeedCardProps> = ({
       <div className="flex flex-col">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
-            <h2 className={`text-lg font-bold tracking-tight leading-tight text-[#0f172a] ${isExpanded ? '' : 'line-clamp-2'}`}>
+            <h2 className={`text-lg font-bold tracking-tight leading-tight text-text-main ${isExpanded ? '' : 'line-clamp-2'}`}>
               {item.title}
             </h2>
-            <div className="flex items-center gap-4 mt-2 text-xs text-[#64748b]">
+            <div className="flex items-center gap-4 mt-2 text-xs text-text-muted">
               <div className="w-40 shrink-0 truncate">
-                By <b className="text-[#1e293b]">{item.creator || 'Anonymous'}</b>
+                By <b className="text-text-main">{item.creator || 'Anonymous'}</b>
               </div>
               <div className="w-56 shrink-0 flex items-center gap-1.5 font-medium">
                 <Clock className="w-3.5 h-3.5 opacity-60" />
@@ -85,7 +85,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
               <div className="flex-1 flex items-center gap-1 justify-end shrink-0">
                 <button 
                   onClick={(e) => onToggleSubscribe(id, e)}
-                  className={`p-1.5 rounded-md transition-all border ${isSubscribed ? 'bg-primary border-primary text-white shadow-sm' : 'border-[#e2e8f0] bg-white text-[#1e293b] hover:border-primary hover:text-primary'}`}
+                  className={`p-1.5 rounded-md transition-all border ${isSubscribed ? 'bg-primary border-primary text-white shadow-sm' : 'border-border bg-card text-text-main hover:border-primary hover:text-primary'}`}
                   title={isSubscribed ? 'Unsubscribe' : 'Subscribe'}
                   data-testid={`subscribe-btn-${id}`}
                 >
@@ -94,7 +94,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                 
                 <button 
                   onClick={(e) => onToggleIgnore(id, e)}
-                  className="p-1.5 rounded-md bg-white border border-[#e2e8f0] text-[#ef4444] hover:bg-red-50 hover:border-red-200 transition-all"
+                  className="p-1.5 rounded-md bg-card border border-border text-[#ef4444] hover:bg-red-950 hover:border-red-900 transition-all"
                   title="Ignore Post"
                   data-testid={`ignore-btn-${id}`}
                 >
@@ -106,7 +106,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                   target="_blank" 
                   rel="noopener noreferrer" 
                   onClick={(e) => e.stopPropagation()}
-                  className="p-1.5 text-[#64748b] hover:text-primary hover:bg-[#f1f5f9] border border-transparent hover:border-[#e2e8f0] rounded-md transition-all"
+                  className="p-1.5 text-text-muted hover:text-primary hover:bg-slate-800 border border-transparent hover:border-border rounded-md transition-all"
                   title="View Original"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -117,8 +117,8 @@ export const FeedCard: React.FC<FeedCardProps> = ({
           
           <div className="w-8 shrink-0 flex justify-end pt-1">
             {viewMode === 'summary' && !isSubscribed && (
-              <div className="p-1 rounded-lg bg-[#f1f5f9] group-hover:bg-[#e2e8f0] transition-colors">
-                {isExpanded ? <ChevronUp className="w-4 h-4 text-[#64748b]" /> : <ChevronDown className="w-4 h-4 text-[#64748b]" />}
+              <div className="p-1 rounded-lg bg-slate-800 group-hover:bg-slate-700 transition-colors">
+                {isExpanded ? <ChevronUp className="w-4 h-4 text-text-muted" /> : <ChevronDown className="w-4 h-4 text-text-muted" />}
               </div>
             )}
           </div>
@@ -132,15 +132,15 @@ export const FeedCard: React.FC<FeedCardProps> = ({
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden mt-4"
             >
-              <div className="h-px bg-[#e2e8f0] mb-4" />
+              <div className="h-px bg-slate-700 mb-4" />
               <div 
-                className="prose prose-slate max-w-none text-sm leading-relaxed text-[#334155] content-viewer font-medium"
+                className="prose prose-slate max-w-none text-sm leading-relaxed text-text-muted content-viewer font-medium"
                 dangerouslySetInnerHTML={{ __html: item.content || item.contentSnippet || '' }}
               />
             </motion.div>
           )}
           {!isExpanded && (item.contentSnippet || item.content) && (
-            <p className="mt-3 text-sm leading-relaxed text-[#64748b] line-clamp-2 italic">
+            <p className="mt-3 text-sm leading-relaxed text-text-muted line-clamp-2 italic">
               {item.contentSnippet || item.content?.replace(/<[^>]*>?/gm, '').substring(0, 200)}
             </p>
           )}
