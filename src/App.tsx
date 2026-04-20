@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { FeedItem, FeedData } from './types.ts';
+import { FeedCard } from './components/FeedCard';
 
 /**
  * @license
@@ -254,101 +255,16 @@ export default function App() {
                     minute: '2-digit'
                   });
 
-                  return (
-                    <motion.article 
-                      layout
+                    <FeedCard
                       key={id}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      className={`group border rounded-xl p-5 relative transition-all duration-200 cursor-pointer ${isSubscribed ? 'bg-special-bg border-special-border shadow-sm' : 'bg-white border-[#e2e8f0] hover:shadow-md hover:border-[#cbd5e1]'}`}
-                      onClick={() => toggleExpand(id)}
-                    >
-                      {isSubscribed && (
-                        <div className="mb-3">
-                          <span className="text-[10px] font-black uppercase tracking-widest bg-primary text-white px-2.5 py-1 rounded-md">
-                            Recently Updated &bull; Subscribed
-                          </span>
-                        </div>
-                      )}
-                      
-                      <div className="flex flex-col">
-                        <div className="flex items-start justify-between gap-4">
-                          <div className="min-w-0">
-                            <h2 className={`text-lg font-bold tracking-tight leading-tight text-[#0f172a] ${isExpanded ? '' : 'line-clamp-2'}`}>
-                              {item.title}
-                            </h2>
-                            <div className="flex items-center flex-wrap gap-x-3 gap-y-2 mt-1.5 text-xs text-[#64748b]">
-                              <span className="flex items-center gap-1">
-                                By <b className="text-[#1e293b]">{item.creator || 'Anonymous'}</b>
-                              </span>
-                              <span>&bull;</span>
-                              <span className="flex items-center gap-1.5 font-medium shrink-0">
-                                <Clock className="w-3.5 h-3.5 opacity-60" />
-                                {formattedDate}
-                              </span>
-                              
-                              <div className="flex items-center gap-1 ml-auto shrink-0">
-                                <button 
-                                  onClick={(e) => toggleSubscribe(id, e)}
-                                  className={`p-1.5 rounded-md transition-all border ${isSubscribed ? 'bg-primary border-primary text-white shadow-sm' : 'border-[#e2e8f0] bg-white text-[#1e293b] hover:border-primary hover:text-primary'}`}
-                                  title={isSubscribed ? 'Unsubscribe' : 'Subscribe'}
-                                >
-                                  <Star className={`w-3.5 h-3.5 ${isSubscribed ? 'fill-white' : ''}`} />
-                                </button>
-                                
-                                <button 
-                                  onClick={(e) => toggleIgnore(id, e)}
-                                  className="p-1.5 rounded-md bg-white border border-[#e2e8f0] text-[#ef4444] hover:bg-red-50 hover:border-red-200 transition-all"
-                                  title="Ignore Post"
-                                >
-                                  <EyeOff className="w-3.5 h-3.5" />
-                                </button>
-
-                                <a 
-                                  href={item.link} 
-                                  target="_blank" 
-                                  rel="noopener noreferrer" 
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="p-1.5 text-[#64748b] hover:text-primary hover:bg-[#f1f5f9] border border-transparent hover:border-[#e2e8f0] rounded-md transition-all"
-                                  title="View Original"
-                                >
-                                  <ExternalLink className="w-3.5 h-3.5" />
-                                </a>
-                              </div>
-                            </div>
-                          </div>
-                          
-                          {viewMode === 'summary' && !isSubscribed && (
-                            <div className="p-1 rounded-lg bg-[#f1f5f9] group-hover:bg-[#e2e8f0] transition-colors shrink-0">
-                              {isExpanded ? <ChevronUp className="w-4 h-4 text-[#64748b]" /> : <ChevronDown className="w-4 h-4 text-[#64748b]" />}
-                            </div>
-                          )}
-                        </div>
-
-                        <AnimatePresence>
-                          {isExpanded && (
-                            <motion.div 
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: 'auto', opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              className="overflow-hidden mt-4"
-                            >
-                              <div className="h-px bg-[#e2e8f0] mb-4" />
-                              <div 
-                                className="prose prose-slate max-w-none text-sm leading-relaxed text-[#334155] content-viewer font-medium"
-                                dangerouslySetInnerHTML={{ __html: item.content || item.contentSnippet || '' }}
-                              />
-                            </motion.div>
-                          )}
-                          {!isExpanded && (item.contentSnippet || item.content) && (
-                            <p className="mt-3 text-sm leading-relaxed text-[#64748b] line-clamp-2 italic">
-                              {item.contentSnippet || item.content?.replace(/<[^>]*>?/gm, '').substring(0, 200)}
-                            </p>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    </motion.article>
+                      item={item}
+                      isSubscribed={isSubscribed}
+                      isExpanded={isExpanded}
+                      viewMode={viewMode}
+                      onToggleSubscribe={toggleSubscribe}
+                      onToggleIgnore={toggleIgnore}
+                      onToggleExpand={toggleExpand}
+                    />
                   );
                 })}
               </AnimatePresence>
