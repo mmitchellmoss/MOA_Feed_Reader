@@ -128,31 +128,31 @@ export default function App() {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-bg text-text-main font-sans overflow-hidden">
+    <div className="flex flex-col h-screen bg-black text-zinc-200 font-sans overflow-hidden">
       {/* Header */}
-      <header className="h-16 bg-card border-b border-border flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
+      <header className="h-16 bg-zinc-950 border-b border-zinc-800 flex items-center justify-between px-6 shrink-0 z-10 shadow-sm">
         <div className="flex items-center h-14 w-[400px] overflow-hidden rounded-lg">
           <div className="flex items-center gap-3 ml-2">
             <span className="font-gothic text-4xl text-blue-500 tracking-widest drop-shadow-[0_0_8px_rgba(59,130,246,0.6)]">
               Satchel Hopkins
             </span>
-            <span className="font-bold text-sm tracking-widest text-text-main uppercase mt-2 opacity-80">
+            <span className="font-bold text-sm tracking-widest text-zinc-200 uppercase mt-2 opacity-80">
               Feed Reader
             </span>
           </div>
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="flex bg-bg p-1 border border-border rounded-lg">
+          <div className="flex bg-black p-1 border border-zinc-800 rounded-lg">
             <button 
               onClick={() => setViewMode('summary')}
-              className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'summary' ? 'bg-card shadow-sm text-primary' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'summary' ? 'bg-zinc-950 shadow-sm text-blue-500' : 'text-zinc-500 hover:text-zinc-200'}`}
             >
               Summary
             </button>
             <button 
               onClick={() => setViewMode('full')}
-              className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'full' ? 'bg-card shadow-sm text-primary' : 'text-text-muted hover:text-text-main'}`}
+              className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'full' ? 'bg-zinc-950 shadow-sm text-blue-500' : 'text-zinc-500 hover:text-zinc-200'}`}
             >
               Full View
             </button>
@@ -161,7 +161,7 @@ export default function App() {
           <button 
             onClick={fetchFeed}
             disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg text-xs font-bold hover:bg-accent transition-colors disabled:opacity-50"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-accent transition-colors disabled:opacity-50"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh Feed
@@ -171,38 +171,38 @@ export default function App() {
 
       <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
-        <aside className="w-64 border-r border-border bg-card flex flex-col p-5 shrink-0">
-          <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mb-4">Feeds</div>
+        <aside className="w-64 border-r border-zinc-800 bg-zinc-950 flex flex-col p-5 shrink-0">
+          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Feeds</div>
           <nav className="space-y-1">
             <button 
               onClick={() => setSidebarFilter('all')}
-              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'all' ? 'bg-special-bg text-primary font-semibold' : 'text-text-main hover:bg-bg'}`}
+              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'all' ? 'bg-zinc-900 text-blue-500 font-semibold' : 'text-zinc-200 hover:bg-black'}`}
             >
               <div className="flex items-center gap-3">
                 <Activity className="w-4 h-4" />
                 <span>All Activity</span>
               </div>
-              <span className="bg-slate-700 text-text-muted px-2 py-0.5 rounded-full text-[10px] font-bold">
+              <span className="bg-zinc-800 text-zinc-500 px-2 py-0.5 rounded-full text-[10px] font-bold">
                 {feed?.items.filter(i => !ignoredIds.includes(i.guid || i.link || '')).length || 0}
               </span>
             </button>
             <button 
               onClick={() => setSidebarFilter('subscribed')}
-              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'subscribed' ? 'bg-special-bg text-primary font-semibold' : 'text-text-main hover:bg-bg'}`}
+              className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'subscribed' ? 'bg-zinc-900 text-blue-500 font-semibold' : 'text-zinc-200 hover:bg-black'}`}
             >
               <div className="flex items-center gap-3">
                 <Bookmark className="w-4 h-4" />
                 <span>Subscribed</span>
               </div>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${subscribedIds.length > 0 ? 'bg-primary text-white' : 'bg-slate-700 text-text-muted'}`}>
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${subscribedIds.length > 0 ? 'bg-blue-600 text-white' : 'bg-zinc-800 text-zinc-500'}`}>
                 {subscribedIds.length}
               </span>
             </button>
           </nav>
 
-          <div className="text-[10px] uppercase tracking-widest text-text-muted font-bold mt-8 mb-4">Filters</div>
+          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mt-8 mb-4">Filters</div>
           <nav className="space-y-1">
-            <div className="flex items-center justify-between p-2.5 rounded-lg text-sm text-text-muted opacity-60">
+            <div className="flex items-center justify-between p-2.5 rounded-lg text-sm text-zinc-500 opacity-60">
               <div className="flex items-center gap-3">
                 <Filter className="w-4 h-4" />
                 <span>Ignored</span>
@@ -211,10 +211,10 @@ export default function App() {
             </div>
           </nav>
 
-          <div className="mt-auto pt-6 border-t border-border">
+          <div className="mt-auto pt-6 border-t border-zinc-800">
              <button 
               onClick={resetFilters}
-              className="flex items-center gap-2 text-[10px] text-text-muted font-bold uppercase tracking-wider hover:text-red-500 transition-colors"
+              className="flex items-center gap-2 text-[10px] text-zinc-500 font-bold uppercase tracking-wider hover:text-red-500 transition-colors"
             >
               <Trash2 className="w-3.5 h-3.5" />
               Reset Settings
@@ -223,7 +223,7 @@ export default function App() {
         </aside>
 
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto p-8 bg-bg scroll-smooth">
+        <main className="flex-1 overflow-y-auto p-8 bg-black scroll-smooth">
           {error && (
             <div className="mb-8 p-4 bg-red-950 border border-red-100 text-red-900 rounded-xl flex items-start gap-4">
               <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-500" />
@@ -237,8 +237,8 @@ export default function App() {
           <div className="max-w-4xl mx-auto space-y-4">
             {loading && !feed ? (
               <div className="flex flex-col items-center justify-center py-32 gap-4 animate-pulse opacity-50">
-                <div className="w-10 h-10 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-                <p className="text-xs font-bold tracking-widest text-text-muted uppercase">Loading Feed Entries...</p>
+                <div className="w-10 h-10 border-4 border-blue-600/20 border-t-primary rounded-full animate-spin"></div>
+                <p className="text-xs font-bold tracking-widest text-zinc-500 uppercase">Loading Feed Entries...</p>
               </div>
             ) : (
               <AnimatePresence initial={false}>
@@ -271,12 +271,12 @@ export default function App() {
             )}
 
             {filteredAndSortedItems.length === 0 && !loading && (
-              <div className="py-32 text-center bg-card border border-border rounded-2xl shadow-sm">
-                <div className="w-16 h-16 bg-slate-800 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <Rss className="w-8 h-8 text-slate-500" />
+              <div className="py-32 text-center bg-zinc-950 border border-zinc-800 rounded-2xl shadow-sm">
+                <div className="w-16 h-16 bg-zinc-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Rss className="w-8 h-8 text-zinc-500" />
                 </div>
-                <h3 className="font-bold text-text-main">No items to show</h3>
-                <p className="text-xs text-text-muted mt-1 uppercase tracking-wider font-bold">Your feed filters are quite strict!</p>
+                <h3 className="font-bold text-zinc-200">No items to show</h3>
+                <p className="text-xs text-zinc-500 mt-1 uppercase tracking-wider font-bold">Your feed filters are quite strict!</p>
               </div>
             )}
           </div>
