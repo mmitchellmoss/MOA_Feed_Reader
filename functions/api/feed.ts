@@ -11,7 +11,15 @@ export async function onRequest(context: any) {
     });
 
     const feedUrl = 'https://forums.bmwmoa.org/forums/-/index.rss';
-    const feed = await parser.parseURL(feedUrl);
+    
+    // Cloudflare Workers fully support the modern fetch() API.
+    // We fetch the raw XML first, then pass the string to rss-parser.
+    const response = await fetch(feedUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch from forums: ${response.status} ${response.statusText}`);
+    }
+    const xml = await response.text();
+    const feed = await parser.parseString(xml);
     
     return new Response(JSON.stringify(feed), {
       headers: {
