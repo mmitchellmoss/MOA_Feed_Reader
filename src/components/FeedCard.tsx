@@ -49,7 +49,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
   });
 
   return (
-    <motion.article 
+    <motion.article
       layout
       key={id}
       initial={{ opacity: 0, y: 12 }}
@@ -66,7 +66,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
           </span>
         </div>
       )}
-      
+
       <div className="flex flex-col">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0 flex-1">
@@ -81,9 +81,9 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                 <Clock className="w-3.5 h-3.5 opacity-60" />
                 {formattedDate}
               </div>
-              
+
               <div className="flex-1 flex items-center gap-1 justify-end shrink-0">
-                <button 
+                <button
                   onClick={(e) => onToggleSubscribe(id, e)}
                   className={`p-1.5 rounded-md transition-all border ${isSubscribed ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'border-zinc-800 bg-zinc-950 text-zinc-200 hover:border-blue-600 hover:text-blue-500'}`}
                   title={isSubscribed ? 'Unsubscribe' : 'Subscribe'}
@@ -91,20 +91,22 @@ export const FeedCard: React.FC<FeedCardProps> = ({
                 >
                   <Star className={`w-3.5 h-3.5 ${isSubscribed ? 'fill-white' : ''}`} />
                 </button>
-                
-                <button 
-                  onClick={(e) => onToggleIgnore(id, e)}
-                  className="p-1.5 rounded-md bg-zinc-950 border border-zinc-800 text-[#ef4444] hover:bg-red-950 hover:border-red-900 transition-all"
-                  title="Ignore Post"
-                  data-testid={`ignore-btn-${id}`}
-                >
-                  <EyeOff className="w-3.5 h-3.5" />
-                </button>
 
-                <a 
-                  href={item.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                {!isSubscribed && (
+                  <button
+                    onClick={(e) => onToggleIgnore(id, e)}
+                    className="p-1.5 rounded-md bg-zinc-950 border border-zinc-800 text-[#ef4444] hover:bg-red-950 hover:border-red-900 transition-all"
+                    title="Ignore Post"
+                    data-testid={`ignore-btn-${id}`}
+                  >
+                    <EyeOff className="w-3.5 h-3.5" />
+                  </button>
+                )}
+
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   onClick={(e) => e.stopPropagation()}
                   className="p-1.5 text-zinc-500 hover:text-blue-500 hover:bg-zinc-900 border border-transparent hover:border-zinc-800 rounded-md transition-all"
                   title="View Original"
@@ -114,7 +116,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
               </div>
             </div>
           </div>
-          
+
           <div className="w-8 shrink-0 flex justify-end pt-1">
             {viewMode === 'summary' && !isSubscribed && (
               <div className="p-1 rounded-lg bg-zinc-900 group-hover:bg-zinc-800 transition-colors">
@@ -126,14 +128,14 @@ export const FeedCard: React.FC<FeedCardProps> = ({
 
         <AnimatePresence>
           {isExpanded && (
-            <motion.div 
+            <motion.div
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: 'auto', opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               className="overflow-hidden mt-4"
             >
               <div className="h-px bg-zinc-800 mb-4" />
-              <div 
+              <div
                 className="prose prose-slate max-w-none text-sm leading-relaxed text-zinc-500 content-viewer font-medium"
                 dangerouslySetInnerHTML={{ __html: item.content || item.contentSnippet || '' }}
               />
