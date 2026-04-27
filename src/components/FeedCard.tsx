@@ -16,7 +16,7 @@ export interface FeedCardProps {
   /** The current view mode ('summary' or 'full') */
   viewMode: 'summary' | 'full';
   /** Callback to toggle subscription status */
-  onToggleSubscribe: (id: string, e: React.MouseEvent) => void;
+  onToggleSubscribe: (item: FeedItem, e: React.MouseEvent) => void;
   /** Callback to ignore the item */
   onToggleIgnore: (id: string, e: React.MouseEvent) => void;
   /** Callback to expand/collapse the item */
@@ -84,7 +84,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
 
               <div className="flex-1 flex items-center gap-1 justify-end shrink-0">
                 <button
-                  onClick={(e) => onToggleSubscribe(id, e)}
+                  onClick={(e) => onToggleSubscribe(item, e)}
                   className={`p-1.5 rounded-md transition-all border ${isSubscribed ? 'bg-blue-600 border-blue-600 text-white shadow-sm' : 'border-zinc-800 bg-zinc-950 text-zinc-200 hover:border-blue-600 hover:text-blue-500'}`}
                   title={isSubscribed ? 'Unsubscribe' : 'Subscribe'}
                   data-testid={`subscribe-btn-${id}`}
