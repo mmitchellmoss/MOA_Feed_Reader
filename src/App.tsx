@@ -28,9 +28,9 @@ export default function App() {
   const [feed, setFeed] = useState<FeedData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [subscribedIds, setSubscribedIds] = useState<string[]>(() => {
-    const saved = localStorage.getItem('moa_subscribed');
-    return saved ? JSON.parse(saved) : [];
+  const [subscribedItems, setSubscribedItems] = useState<Record<string, FeedItem>>(() => {
+    const saved = localStorage.getItem('moa_subscribed_items');
+    return saved ? JSON.parse(saved) : {};
   });
   const [ignoredIds, setIgnoredIds] = useState<string[]>(() => {
     const saved = localStorage.getItem('moa_ignored');
@@ -45,8 +45,8 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('moa_subscribed', JSON.stringify(subscribedIds));
-  }, [subscribedIds]);
+    localStorage.setItem('moa_subscribed_items', JSON.stringify(subscribedItems));
+  }, [subscribedItems]);
 
   useEffect(() => {
     localStorage.setItem('moa_ignored', JSON.stringify(ignoredIds));
@@ -60,6 +60,32 @@ export default function App() {
       if (!response.ok) throw new Error('Failed to fetch feed');
       const data: FeedData = await response.json();
       setFeed(data);
+
+      const legacyIdsStr = localStorage.getItem('moa_subscribed');
+      if (legacyIdsStr) {
+        try {
+          const legacyIds: string[] = JSON.parse(legacyIdsStr);
+          if (Array.isArray(legacyIds) && legacyIds.length > 0) {
+            setSubscribedItems(prev => {
+              const newItems = { ...prev };
+              let migrated = false;
+              legacyIds.forEach(id => {
+                if (!newItems[id]) {
+                  const found = data.items.find(item => (item.guid || item.link || '') === id);
+                  if (found) {
+                    newItems[id] = found;
+                    migrated = true;
+                  }
+                }
+              });
+              return migrated ? newItems : prev;
+            });
+          }
+        } catch (e) {
+          // ignore
+        }
+        localStorage.removeItem('moa_subscribed');
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An unknown error occurred');
     } finally {
@@ -67,11 +93,18 @@ export default function App() {
     }
   };
 
-  const toggleSubscribe = (id: string, e: React.MouseEvent) => {
+  const toggleSubscribe = (item: FeedItem, e: React.MouseEvent) => {
     e.stopPropagation();
-    setSubscribedIds(prev => 
-      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]
-    );
+    const id = item.guid || item.link || '';
+    setSubscribedItems(prev => {
+      const newItems = { ...prev };
+      if (newItems[id]) {
+        delete newItems[id];
+      } else {
+        newItems[id] = item;
+      }
+      return newItems;
+    });
   };
 
   const toggleIgnore = (id: string, e: React.MouseEvent) => {
@@ -87,9 +120,21 @@ export default function App() {
   };
 
   const filteredAndSortedItems = useMemo(() => {
-    if (!feed) return [];
+    const allItemsMap = new Map<string, FeedItem>();
     
-    let items = feed.items.filter(item => {
+    Object.values(subscribedItems).forEach(item => {
+      const id = item.guid || item.link || '';
+      allItemsMap.set(id, item);
+    });
+
+    if (feed) {
+      feed.items.forEach(item => {
+        const id = item.guid || item.link || '';
+        allItemsMap.set(id, item);
+      });
+    }
+
+    let items = Array.from(allItemsMap.values()).filter(item => {
       const id = item.guid || item.link || '';
       return !ignoredIds.includes(id);
     });
@@ -97,15 +142,15 @@ export default function App() {
     if (sidebarFilter === 'subscribed') {
       items = items.filter(item => {
         const id = item.guid || item.link || '';
-        return subscribedIds.includes(id);
+        return !!subscribedItems[id];
       });
     }
     
     return items.sort((a, b) => {
       const idA = a.guid || a.link || '';
       const idB = b.guid || b.link || '';
-      const isSubA = subscribedIds.includes(idA);
-      const isSubB = subscribedIds.includes(idB);
+      const isSubA = !!subscribedItems[idA];
+      const isSubB = !!subscribedItems[idB];
 
       // In "all" view, subscribed items float to top
       if (sidebarFilter === 'all') {
@@ -118,7 +163,7 @@ export default function App() {
       const dateB = new Date(b.pubDate || 0).getTime();
       return dateB - dateA;
     });
-  }, [feed, subscribedIds, ignoredIds, sidebarFilter]);
+  }, [feed, subscribedItems, ignoredIds, sidebarFilter]);
 
 
 
@@ -195,8 +240,8 @@ export default function App() {
                 <Bookmark className="w-4 h-4" />
                 <span>Subscribed</span>
               </div>
-              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${subscribedIds.length > 0 ? 'bg-blue-600 text-white' : 'bg-zinc-800 text-zinc-500'}`}>
-                {subscribedIds.length}
+              <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${Object.keys(subscribedItems).length > 0 ? 'bg-blue-600 text-white' : 'bg-zinc-800 text-zinc-500'}`}>
+                {Object.keys(subscribedItems).length}
               </span>
             </button>
           </nav>
@@ -237,7 +282,7 @@ export default function App() {
               <AnimatePresence initial={false}>
                 {filteredAndSortedItems.map((item) => {
                   const id = item.guid || item.link || '';
-                  const isSubscribed = subscribedIds.includes(id);
+                  const isSubscribed = !!subscribedItems[id];
                   const isExpanded = expandedIds.includes(id) || viewMode === 'full';
                   const formattedDate = new Date(item.pubDate || '').toLocaleDateString('en-US', {
                     month: 'short',
