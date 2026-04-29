@@ -8,6 +8,8 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   User,
   AlertCircle,
@@ -40,6 +42,7 @@ export default function App() {
   const [viewMode, setViewMode] = useState<'summary' | 'full'>('summary');
   const [sidebarFilter, setSidebarFilter] = useState<'all' | 'subscribed'>('all');
   const [showSubscribed, setShowSubscribed] = useState<boolean>(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
   useEffect(() => {
     fetchFeed();
@@ -241,11 +244,14 @@ export default function App() {
         </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar */}
-        <aside className="w-64 border-r border-zinc-800 bg-zinc-950 flex flex-col p-5 shrink-0">
-          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Feeds</div>
-          <nav className="space-y-1">
+        <aside 
+          className={`border-r border-zinc-800 bg-zinc-950 flex flex-col shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden relative z-20 ${isSidebarOpen ? 'w-64' : 'w-0'}`}
+        >
+          <div className="w-64 p-5 flex flex-col h-full min-w-[16rem]">
+            <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Feeds</div>
+            <nav className="space-y-1">
             <button 
               onClick={() => setSidebarFilter('all')}
               className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'all' ? 'bg-zinc-900 text-blue-500 font-semibold' : 'text-zinc-200 hover:bg-black'}`}
@@ -271,14 +277,22 @@ export default function App() {
               </span>
             </button>
           </nav>
-
-
-
-
+          </div>
         </aside>
 
+        {/* Toggle Button Container - positioned on the line between aside and main */}
+        <div className="relative z-30 flex items-start">
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="absolute -left-3 top-6 bg-zinc-900 border border-zinc-700 rounded-full p-1 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm focus:outline-none"
+            title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+          >
+            {isSidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+          </button>
+        </div>
+
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto p-8 bg-black scroll-smooth">
+        <main className="flex-1 overflow-y-auto p-8 bg-black scroll-smooth relative z-10">
           {error && (
             <div className="mb-8 p-4 bg-red-950 border border-red-100 text-red-900 rounded-xl flex items-start gap-4">
               <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-500" />
