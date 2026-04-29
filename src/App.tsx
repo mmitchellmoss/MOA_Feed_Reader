@@ -8,6 +8,8 @@ import {
   ExternalLink,
   ChevronDown,
   ChevronUp,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   User,
   AlertCircle,
@@ -39,6 +41,8 @@ export default function App() {
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'summary' | 'full'>('summary');
   const [sidebarFilter, setSidebarFilter] = useState<'all' | 'subscribed'>('all');
+  const [showSubscribed, setShowSubscribed] = useState<boolean>(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
 
   useEffect(() => {
     fetchFeed();
@@ -145,6 +149,13 @@ export default function App() {
         return !!subscribedItems[id];
       });
     }
+
+    if (!showSubscribed) {
+      items = items.filter(item => {
+        const id = item.guid || item.link || '';
+        return !subscribedItems[id];
+      });
+    }
     
     return items.sort((a, b) => {
       const idA = a.guid || a.link || '';
@@ -163,7 +174,7 @@ export default function App() {
       const dateB = new Date(b.pubDate || 0).getTime();
       return dateB - dateA;
     });
-  }, [feed, subscribedItems, ignoredIds, sidebarFilter]);
+  }, [feed, subscribedItems, ignoredIds, sidebarFilter, showSubscribed]);
 
 
 
@@ -188,10 +199,27 @@ export default function App() {
           </div>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="flex bg-black p-1 border border-zinc-800 rounded-lg">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3">
+            <span className={`text-xs font-bold uppercase tracking-wider transition-colors ${showSubscribed ? 'text-zinc-200' : 'text-zinc-600'}`}>
+              Subscribed
+            </span>
             <button 
-              onClick={() => setViewMode('summary')}
+              onClick={() => setShowSubscribed(!showSubscribed)}
+              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none border border-zinc-800 ${showSubscribed ? 'bg-blue-600 border-blue-500' : 'bg-black'}`}
+            >
+              <span 
+                className={`inline-block h-3 w-3 transform rounded-full bg-zinc-200 transition-transform ${showSubscribed ? 'translate-x-4 bg-white' : 'translate-x-1'}`}
+              />
+            </button>
+          </div>
+          
+          <div className="w-px h-6 bg-zinc-800"></div>
+
+          <div className="flex items-center gap-4">
+            <div className="flex bg-black p-1 border border-zinc-800 rounded-lg">
+              <button 
+                onClick={() => setViewMode('summary')}
               className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'summary' ? 'bg-zinc-950 shadow-sm text-blue-500' : 'text-zinc-500 hover:text-zinc-200'}`}
             >
               Summary
@@ -213,13 +241,17 @@ export default function App() {
             Refresh Feed
           </button>
         </div>
+        </div>
       </header>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden relative">
         {/* Sidebar */}
-        <aside className="w-64 border-r border-zinc-800 bg-zinc-950 flex flex-col p-5 shrink-0">
-          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Feeds</div>
-          <nav className="space-y-1">
+        <aside 
+          className={`border-r border-zinc-800 bg-zinc-950 flex flex-col shrink-0 transition-[width] duration-300 ease-in-out overflow-hidden relative z-20 ${isSidebarOpen ? 'w-64' : 'w-0'}`}
+        >
+          <div className="w-64 p-5 flex flex-col h-full min-w-[16rem]">
+            <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mb-4">Feeds</div>
+            <nav className="space-y-1">
             <button 
               onClick={() => setSidebarFilter('all')}
               className={`w-full flex items-center justify-between p-2.5 rounded-lg text-sm transition-colors ${sidebarFilter === 'all' ? 'bg-zinc-900 text-blue-500 font-semibold' : 'text-zinc-200 hover:bg-black'}`}
@@ -245,23 +277,22 @@ export default function App() {
               </span>
             </button>
           </nav>
-
-          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mt-8 mb-4">Filters</div>
-          <nav className="space-y-1">
-            <div className="flex items-center justify-between p-2.5 rounded-lg text-sm text-zinc-500 opacity-60">
-              <div className="flex items-center gap-3">
-                <Filter className="w-4 h-4" />
-                <span>Ignored</span>
-              </div>
-              <span className="text-[10px] font-bold">{ignoredIds.length}</span>
-            </div>
-          </nav>
-
-
+          </div>
         </aside>
 
+        {/* Toggle Button Container - positioned on the line between aside and main */}
+        <div className="relative z-30 flex items-start">
+          <button
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            className="absolute -left-3 top-6 bg-zinc-900 border border-zinc-700 rounded-full p-1 text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800 transition-colors shadow-sm focus:outline-none"
+            title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+          >
+            {isSidebarOpen ? <ChevronLeft className="w-4 h-4" /> : <ChevronRight className="w-4 h-4" />}
+          </button>
+        </div>
+
         {/* Main content */}
-        <main className="flex-1 overflow-y-auto p-8 bg-black scroll-smooth">
+        <main className="flex-1 overflow-y-auto p-8 bg-black scroll-smooth relative z-10">
           {error && (
             <div className="mb-8 p-4 bg-red-950 border border-red-100 text-red-900 rounded-xl flex items-start gap-4">
               <AlertCircle className="w-5 h-5 mt-0.5 shrink-0 text-red-500" />
