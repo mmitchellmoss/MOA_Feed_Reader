@@ -39,6 +39,7 @@ export default function App() {
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'summary' | 'full'>('summary');
   const [sidebarFilter, setSidebarFilter] = useState<'all' | 'subscribed'>('all');
+  const [showSubscribed, setShowSubscribed] = useState<boolean>(true);
 
   useEffect(() => {
     fetchFeed();
@@ -145,6 +146,13 @@ export default function App() {
         return !!subscribedItems[id];
       });
     }
+
+    if (!showSubscribed) {
+      items = items.filter(item => {
+        const id = item.guid || item.link || '';
+        return !subscribedItems[id];
+      });
+    }
     
     return items.sort((a, b) => {
       const idA = a.guid || a.link || '';
@@ -163,7 +171,7 @@ export default function App() {
       const dateB = new Date(b.pubDate || 0).getTime();
       return dateB - dateA;
     });
-  }, [feed, subscribedItems, ignoredIds, sidebarFilter]);
+  }, [feed, subscribedItems, ignoredIds, sidebarFilter, showSubscribed]);
 
 
 
@@ -188,10 +196,27 @@ export default function App() {
           </div>
         </div>
         
-        <div className="flex items-center gap-4">
-          <div className="flex bg-black p-1 border border-zinc-800 rounded-lg">
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-3">
+            <span className={`text-xs font-bold uppercase tracking-wider transition-colors ${showSubscribed ? 'text-zinc-200' : 'text-zinc-600'}`}>
+              Subscribed
+            </span>
             <button 
-              onClick={() => setViewMode('summary')}
+              onClick={() => setShowSubscribed(!showSubscribed)}
+              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none border border-zinc-800 ${showSubscribed ? 'bg-blue-600 border-blue-500' : 'bg-black'}`}
+            >
+              <span 
+                className={`inline-block h-3 w-3 transform rounded-full bg-zinc-200 transition-transform ${showSubscribed ? 'translate-x-4 bg-white' : 'translate-x-1'}`}
+              />
+            </button>
+          </div>
+          
+          <div className="w-px h-6 bg-zinc-800"></div>
+
+          <div className="flex items-center gap-4">
+            <div className="flex bg-black p-1 border border-zinc-800 rounded-lg">
+              <button 
+                onClick={() => setViewMode('summary')}
               className={`px-4 py-1.5 rounded-md text-xs font-semibold transition-all ${viewMode === 'summary' ? 'bg-zinc-950 shadow-sm text-blue-500' : 'text-zinc-500 hover:text-zinc-200'}`}
             >
               Summary
@@ -212,6 +237,7 @@ export default function App() {
             <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin' : ''}`} />
             Refresh Feed
           </button>
+        </div>
         </div>
       </header>
 
