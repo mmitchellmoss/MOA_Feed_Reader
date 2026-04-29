@@ -272,16 +272,7 @@ export default function App() {
             </button>
           </nav>
 
-          <div className="text-[10px] uppercase tracking-widest text-zinc-500 font-bold mt-8 mb-4">Filters</div>
-          <nav className="space-y-1">
-            <div className="flex items-center justify-between p-2.5 rounded-lg text-sm text-zinc-500 opacity-60">
-              <div className="flex items-center gap-3">
-                <Filter className="w-4 h-4" />
-                <span>Ignored</span>
-              </div>
-              <span className="text-[10px] font-bold">{ignoredIds.length}</span>
-            </div>
-          </nav>
+
 
 
         </aside>
