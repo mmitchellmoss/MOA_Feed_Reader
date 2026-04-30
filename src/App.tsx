@@ -38,6 +38,10 @@ export default function App() {
     const saved = localStorage.getItem('moa_ignored');
     return saved ? JSON.parse(saved) : [];
   });
+  const [ignoredTitles, setIgnoredTitles] = useState<string[]>(() => {
+    const saved = localStorage.getItem('moa_ignored_titles');
+    return saved ? JSON.parse(saved) : [];
+  });
   const [expandedIds, setExpandedIds] = useState<string[]>([]);
   const [viewMode, setViewMode] = useState<'summary' | 'full'>('summary');
   const [sidebarFilter, setSidebarFilter] = useState<'all' | 'subscribed'>('all');
@@ -55,6 +59,10 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem('moa_ignored', JSON.stringify(ignoredIds));
   }, [ignoredIds]);
+
+  useEffect(() => {
+    localStorage.setItem('moa_ignored_titles', JSON.stringify(ignoredTitles));
+  }, [ignoredTitles]);
 
   const fetchFeed = async () => {
     setLoading(true);
@@ -111,9 +119,15 @@ export default function App() {
     });
   };
 
-  const toggleIgnore = (id: string, e: React.MouseEvent) => {
+  const toggleIgnore = (item: FeedItem, e: React.MouseEvent) => {
     e.stopPropagation();
-    setIgnoredIds(prev => [...prev, id]);
+    const id = item.guid || item.link || '';
+    if (id) {
+      setIgnoredIds(prev => [...prev, id].slice(-2000));
+    }
+    if (item.title) {
+      setIgnoredTitles(prev => [...prev, item.title!].slice(-2000));
+    }
   };
 
   const toggleExpand = (id: string) => {
@@ -125,6 +139,8 @@ export default function App() {
 
   const filteredAndSortedItems = useMemo(() => {
     const allItemsMap = new Map<string, FeedItem>();
+    const ignoredIdsSet = new Set(ignoredIds);
+    const ignoredTitlesSet = new Set(ignoredTitles);
     
     Object.values(subscribedItems).forEach(item => {
       const id = item.guid || item.link || '';
@@ -140,7 +156,9 @@ export default function App() {
 
     let items = Array.from(allItemsMap.values()).filter(item => {
       const id = item.guid || item.link || '';
-      return !ignoredIds.includes(id);
+      const isIgnoredById = ignoredIdsSet.has(id);
+      const isIgnoredByTitle = item.title ? ignoredTitlesSet.has(item.title) : false;
+      return !isIgnoredById && !isIgnoredByTitle;
     });
 
     if (sidebarFilter === 'subscribed') {
@@ -174,7 +192,7 @@ export default function App() {
       const dateB = new Date(b.pubDate || 0).getTime();
       return dateB - dateA;
     });
-  }, [feed, subscribedItems, ignoredIds, sidebarFilter, showSubscribed]);
+  }, [feed, subscribedItems, ignoredIds, ignoredTitles, sidebarFilter, showSubscribed]);
 
 
 

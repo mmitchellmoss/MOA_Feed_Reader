@@ -18,7 +18,7 @@ export interface FeedCardProps {
   /** Callback to toggle subscription status */
   onToggleSubscribe: (item: FeedItem, e: React.MouseEvent) => void;
   /** Callback to ignore the item */
-  onToggleIgnore: (id: string, e: React.MouseEvent) => void;
+  onToggleIgnore: (item: FeedItem, e: React.MouseEvent) => void;
   /** Callback to expand/collapse the item */
   onToggleExpand: (id: string) => void;
 }
@@ -94,7 +94,7 @@ export const FeedCard: React.FC<FeedCardProps> = ({
 
                 {!isSubscribed && (
                   <button
-                    onClick={(e) => onToggleIgnore(id, e)}
+                    onClick={(e) => onToggleIgnore(item, e)}
                     className="p-1.5 rounded-md bg-zinc-950 border border-zinc-800 text-[#ef4444] hover:bg-red-950 hover:border-red-900 transition-all"
                     title="Ignore Post"
                     data-testid={`ignore-btn-${id}`}
